@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'screens/doctor_patient_overview.dart';
+import 'screens/patient_view_page.dart';
 import 'services/patient_database.dart';
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
@@ -45,6 +46,14 @@ class MyApp extends StatelessWidget {
       title: 'Doctor & Pharmacist Portal',
       debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),
+      onGenerateRoute: (settings) {
+        final uri = Uri.parse(settings.name ?? '');
+        if (uri.pathSegments.length == 2 && uri.pathSegments[0] == 'patient-view') {
+          final patientId = uri.pathSegments[1];
+          return PatientViewPage.route(patientId);
+        }
+        return null;
+      },
       builder: (context, child) {
         final mediaQuery = MediaQuery.of(context);
         final textScaleFactor =

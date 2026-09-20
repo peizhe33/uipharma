@@ -287,6 +287,21 @@ static Future<void> addFinalPrescription({
   });
 }
 
+static Future<List<FinalPrescription>> getVerifiedPrescriptionsForPatient(
+  String patientId,
+) async {
+  final data = await _client
+      .from('prescriptions')
+      .select()
+      .eq('patient_id', patientId.trim())
+      .eq('status', 'verified')
+      .order('created_at', ascending: false);
+
+  return (data as List)
+      .map((row) => FinalPrescription.fromJson(row))
+      .toList();
+}
+
 static Future<void> addPrescription({
   required String patientId,
   required String patientName,

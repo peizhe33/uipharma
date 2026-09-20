@@ -8,6 +8,7 @@ import 'feedback_page.dart';
 import 'egfr_graph_page.dart';
 import '../services/patient_supabase_service.dart';
 import 'patient_condition_detail_page.dart';
+import 'patient_view_page.dart';
 import '../widgets/review_notification_bell.dart';
 import '../widgets/responsive.dart';
 
@@ -119,6 +120,54 @@ class PatientOverviewPage extends StatelessWidget {
                         builder: (_) => const DoctorIdGatePage(),
                       ),
                     ),
+                  ),
+
+                  SizedBox(height: Responsive.gap(context, 16)),
+
+                  _menuCard(
+                    context: context,
+                    icon: Icons.person_outline,
+                    iconBackground: const Color(0xFFE8F7F4),
+                    iconColor: Colors.teal,
+                    title: 'Patient View',
+                    subtitle:
+                        'Open the patient-facing medicine summary without clinician login.',
+                    onPressed: () {
+                      final controller = TextEditingController();
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text('Open Patient View'),
+                          content: TextField(
+                            controller: controller,
+                            autofocus: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Patient ID',
+                              hintText: 'e.g. PNEU001',
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancel'),
+                            ),
+                            FilledButton(
+                              onPressed: () {
+                                final id = controller.text.trim();
+                                Navigator.pop(context);
+                                if (id.isNotEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    PatientViewPage.route(id),
+                                  );
+                                }
+                              },
+                              child: const Text('Open'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
 
                   SizedBox(height: Responsive.gap(context, 16)),
