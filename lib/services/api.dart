@@ -36,7 +36,7 @@ class SmartPharmaResponse {
         ? reportRaw
         : <String, dynamic>{};
 
-    List<Map<String, dynamic>> _asListOfMaps(dynamic v) {
+    List<Map<String, dynamic>> asListOfMaps(dynamic v) {
       if (v is List) {
         return v.whereType<Map>().map((m) => Map<String, dynamic>.from(m)).toList();
       }
@@ -49,8 +49,8 @@ class SmartPharmaResponse {
       // into the answer field - screens that read `.answer` expect prose.
       answer: json['answer'] as String? ?? '',
       report: report,
-      preprocessingAlerts: _asListOfMaps(json['preprocessing_alerts']),
-      retrieved: _asListOfMaps(json['retrieved']),
+      preprocessingAlerts: asListOfMaps(json['preprocessing_alerts']),
+      retrieved: asListOfMaps(json['retrieved']),
       ragFailure: json['rag_failure'] as bool? ?? false,
       elapsedSeconds: (json['elapsed_s'] as num?)?.toDouble() ?? 0.0,
     );

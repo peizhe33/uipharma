@@ -32,13 +32,34 @@ class PatientViewPage extends StatefulWidget {
 
 class _PatientViewPageState extends State<PatientViewPage> {
   late Future<List<FinalPrescription>> _prescriptionsFuture;
+  String? _resolvedPatientName;
 
   @override
   void initState() {
     super.initState();
+    _resolvedPatientName = widget.patientName?.trim();
+    _loadPatientName();
     _prescriptionsFuture = PatientSupabaseService.getVerifiedPrescriptionsForPatient(
       widget.patientId,
     );
+  }
+
+  Future<void> _loadPatientName() async {
+    if (_resolvedPatientName != null && _resolvedPatientName!.isNotEmpty) {
+      return;
+    }
+
+    try {
+      final patientName = await PatientSupabaseService.getPatientNameById(
+        widget.patientId,
+      );
+      if (!mounted || patientName == null) return;
+      setState(() {
+        _resolvedPatientName = patientName;
+      });
+    } catch (_) {
+      // The medicines page can still load if the patient-name lookup fails.
+    }
   }
 
   List<Map<String, dynamic>> _medicinesFor(FinalPrescription prescription) {
@@ -202,7 +223,7 @@ class _PatientViewPageState extends State<PatientViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final patientName = widget.patientName?.trim();
+    final patientName = _resolvedPatientName;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5FBF8),
@@ -310,6 +331,7 @@ class _PatientViewPageState extends State<PatientViewPage> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
               children: [
+                _greetingHeader(patientName),
                 _activeCountHeader(items.length),
                 _sectionHeader('Your active medicines', Colors.teal.shade700),
                 ...items.map(_medicineCard),
@@ -319,6 +341,24 @@ class _PatientViewPageState extends State<PatientViewPage> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _greetingHeader(String? patientName) {
+    final greetingName = patientName != null && patientName.isNotEmpty
+        ? patientName
+        : 'there';
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Text(
+        'Hello, $greetingName!',
+        style: TextStyle(
+          color: Colors.grey.shade900,
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+        ),
       ),
     );
   }

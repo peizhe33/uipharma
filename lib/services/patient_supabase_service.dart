@@ -56,6 +56,20 @@ class PatientSupabaseService {
     }).toList();
   }
 
+  static Future<String?> getPatientNameById(String patientId) async {
+    final data = await _client
+        .from('patients')
+        .select('name')
+        .eq('id', patientId.trim())
+        .maybeSingle();
+
+    final name = data?['name'];
+    if (name is String && name.trim().isNotEmpty) {
+      return name.trim();
+    }
+    return null;
+  }
+
   // =========================
   // SEARCH: BY NAME
   // =========================

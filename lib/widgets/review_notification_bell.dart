@@ -58,7 +58,7 @@ class _DoctorReviewNotificationBellState
             child: ListView.separated(
               shrinkWrap: true,
               itemCount: _items.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (_, index) {
                 final item = _items[index];
                 return ListTile(
@@ -149,7 +149,7 @@ class _PharmacistDecisionNotificationBellState
             child: ListView.separated(
               shrinkWrap: true,
               itemCount: _items.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (_, index) {
                 final item = _items[index];
                 return ListTile(
@@ -230,7 +230,7 @@ class _NotificationPill extends StatelessWidget {
               boxShadow: hasItems
                   ? [
                       BoxShadow(
-                        color: Colors.red.withOpacity(0.35),
+                        color: Colors.red.withValues(alpha: 0.35),
                         blurRadius: 12,
                         offset: const Offset(0, 3),
                       ),

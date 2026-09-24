@@ -850,8 +850,9 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
     if (_alerts.isEmpty) return true;
     if (_selectedReason == null) return false;
     if (_selectedReason == 'Others (Please specify)' &&
-        _otherReasonCtrl.text.trim().isEmpty)
+        _otherReasonCtrl.text.trim().isEmpty) {
       return false;
+    }
     return true;
   }
 
@@ -1150,7 +1151,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
                   ),
                 ),
                 DropdownButtonFormField<String>(
-                  value: _aiUnits[i],
+                  initialValue: _aiUnits[i],
                   isDense: true,
                   isExpanded: true,
                   decoration: const InputDecoration(
@@ -1174,7 +1175,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
               runSpacing: 8,
               children: [
                 DropdownButtonFormField<String>(
-                  value: _aiFreqs[i],
+                  initialValue: _aiFreqs[i],
                   isDense: true,
                   isExpanded: true,
                   decoration: const InputDecoration(
@@ -1190,7 +1191,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
                           setState(() => _aiFreqs[i] = v ?? 'Once a day'),
                 ),
                 DropdownButtonFormField<String>(
-                  value: _aiRoutes[i],
+                  initialValue: _aiRoutes[i],
                   isDense: true,
                   isExpanded: true,
                   decoration: const InputDecoration(
@@ -1421,7 +1422,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
             ),
           if (_alerts.isNotEmpty)
             DropdownButtonFormField<String>(
-              value: _selectedReason,
+              initialValue: _selectedReason,
               isExpanded: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -1460,7 +1461,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
-            value: _decision,
+            initialValue: _decision,
             isExpanded: true,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
