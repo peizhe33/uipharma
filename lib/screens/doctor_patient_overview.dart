@@ -9,6 +9,7 @@ import 'egfr_graph_page.dart';
 import '../services/patient_supabase_service.dart';
 import 'patient_condition_detail_page.dart';
 import 'patient_view_page.dart';
+import 'scanner_page.dart';
 import '../widgets/review_notification_bell.dart';
 import '../widgets/responsive.dart';
 
@@ -150,6 +151,28 @@ class PatientOverviewPage extends StatelessWidget {
                             TextButton(
                               onPressed: () => Navigator.pop(context),
                               child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                final scannedId = await Navigator.push<String>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const ScannerPage(),
+                                  ),
+                                );
+                                if (!context.mounted) {
+                                  return;
+                                }
+                                if (scannedId != null &&
+                                    scannedId.trim().isNotEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    PatientViewPage.route(scannedId),
+                                  );
+                                }
+                              },
+                              child: const Text('Scan QR'),
                             ),
                             FilledButton(
                               onPressed: () {
