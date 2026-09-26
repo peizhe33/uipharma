@@ -3,6 +3,16 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/patient_supabase_service.dart';
 
+class _PatientViewData {
+  final bool patientExists;
+  final List<FinalPrescription> prescriptions;
+
+  const _PatientViewData({
+    required this.patientExists,
+    required this.prescriptions,
+  });
+}
+
 class PatientViewPage extends StatefulWidget {
   final String patientId;
   final String? patientName;
@@ -31,7 +41,7 @@ class PatientViewPage extends StatefulWidget {
 }
 
 class _PatientViewPageState extends State<PatientViewPage> {
-  late Future<List<FinalPrescription>> _prescriptionsFuture;
+  late Future<_PatientViewData> _dataFuture;
   String? _resolvedPatientName;
 
   @override
@@ -39,8 +49,25 @@ class _PatientViewPageState extends State<PatientViewPage> {
     super.initState();
     _resolvedPatientName = widget.patientName?.trim();
     _loadPatientName();
-    _prescriptionsFuture = PatientSupabaseService.getVerifiedPrescriptionsForPatient(
+    _dataFuture = _loadData();
+  }
+
+  Future<_PatientViewData> _loadData() async {
+    final patient = await PatientSupabaseService.getPatientById(widget.patientId);
+    if (patient == null) {
+      return const _PatientViewData(
+        patientExists: false,
+        prescriptions: [],
+      );
+    }
+
+    final prescriptions =
+        await PatientSupabaseService.getVerifiedPrescriptionsForPatient(
       widget.patientId,
+    );
+    return _PatientViewData(
+      patientExists: true,
+      prescriptions: prescriptions,
     );
   }
 
@@ -236,8 +263,8 @@ class _PatientViewPageState extends State<PatientViewPage> {
         backgroundColor: Colors.teal.shade700,
         foregroundColor: Colors.white,
       ),
-      body: FutureBuilder<List<FinalPrescription>>(
-        future: _prescriptionsFuture,
+      body: FutureBuilder<_PatientViewData>(
+        future: _dataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -269,7 +296,38 @@ class _PatientViewPageState extends State<PatientViewPage> {
             );
           }
 
-          final prescriptions = snapshot.data ?? const <FinalPrescription>[];
+          final data = snapshot.data!;
+
+          if (!data.patientExists) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.person_off_outlined, size: 64, color: Colors.teal.shade400),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Patient Does Not Exist',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.grey.shade800,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Please check the ID or QR code and try again.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          final prescriptions = data.prescriptions;
 
           if (prescriptions.isEmpty) {
             return Center(
@@ -323,9 +381,7 @@ class _PatientViewPageState extends State<PatientViewPage> {
           return RefreshIndicator(
             onRefresh: () async {
               setState(() {
-                _prescriptionsFuture = PatientSupabaseService.getVerifiedPrescriptionsForPatient(
-                  widget.patientId,
-                );
+                _dataFuture = _loadData();
               });
             },
             child: ListView(

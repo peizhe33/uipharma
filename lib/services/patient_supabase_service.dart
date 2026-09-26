@@ -33,6 +33,25 @@ class PatientSupabaseService {
     }).toList();
   }
 
+  static Future<Patient?> getPatientById(String patientId) async {
+    final data = await _client
+        .from('patients')
+        .select()
+        .eq('id', patientId)
+        .maybeSingle();
+    if (data == null) return null;
+    return Patient(
+      id: data['id'],
+      wardRoomNo: data['ward_room_no'],
+      name: data['name'],
+      gender: data['gender'] ?? '',
+      age: data['age'],
+      height: data['height'],
+      weight: data['weight'],
+      bloodType: data['blood_type'],
+    );
+  }
+
   // =========================
   // WHERE: BY WARD
   // =========================

@@ -133,6 +133,25 @@ class PatientOverviewPage extends StatelessWidget {
                     title: 'Patient View',
                     subtitle:
                         'Open the patient-facing medicine summary without clinician login.',
+                    trailingAction: IconButton(
+                      icon: const Icon(Icons.qr_code_scanner, color: Colors.teal, size: 48),
+                      tooltip: 'Scan QR',
+                      onPressed: () async {
+                        final scannedId = await Navigator.push<String>(
+                          context,
+                          MaterialPageRoute(builder: (_) => const ScannerPage()),
+                        );
+                        if (!context.mounted) {
+                          return;
+                        }
+                        if (scannedId != null && scannedId.trim().isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            PatientViewPage.route(scannedId.trim()),
+                          );
+                        }
+                      },
+                    ),
                     onPressed: () {
                       final controller = TextEditingController();
                       showDialog(
@@ -151,28 +170,6 @@ class PatientOverviewPage extends StatelessWidget {
                             TextButton(
                               onPressed: () => Navigator.pop(context),
                               child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                Navigator.pop(context);
-                                final scannedId = await Navigator.push<String>(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const ScannerPage(),
-                                  ),
-                                );
-                                if (!context.mounted) {
-                                  return;
-                                }
-                                if (scannedId != null &&
-                                    scannedId.trim().isNotEmpty) {
-                                  Navigator.push(
-                                    context,
-                                    PatientViewPage.route(scannedId),
-                                  );
-                                }
-                              },
-                              child: const Text('Scan QR'),
                             ),
                             FilledButton(
                               onPressed: () {
@@ -247,6 +244,7 @@ class PatientOverviewPage extends StatelessWidget {
     required String title,
     required String subtitle,
     required VoidCallback onPressed,
+    Widget? trailingAction,
     bool highlight = false,
   }) {
     return Material(
@@ -333,6 +331,7 @@ class PatientOverviewPage extends StatelessWidget {
                         ),
                       ),
 
+                      if (trailingAction != null) trailingAction,
                       const Icon(
                         Icons.arrow_forward,
                         color: Color(0xFFC5CBD6),
