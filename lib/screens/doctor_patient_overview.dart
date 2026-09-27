@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/patient_database.dart';
@@ -10,6 +12,7 @@ import '../services/patient_supabase_service.dart';
 import 'patient_condition_detail_page.dart';
 import 'patient_view_page.dart';
 import 'patient_portal_otp_gate.dart';
+import 'pi_scanner_page.dart';
 import 'scanner_page.dart';
 import '../widgets/review_notification_bell.dart';
 import '../widgets/responsive.dart';
@@ -25,19 +28,14 @@ class PatientOverviewPage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const FeedbackPage(),
-            ),
+            MaterialPageRoute(builder: (_) => const FeedbackPage()),
           );
         },
         backgroundColor: const Color(0xFF116D37),
         icon: const Icon(Icons.flag, color: Colors.white),
         label: const Text(
           "Feedback",
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
         ),
       ),
 
@@ -46,190 +44,205 @@ class PatientOverviewPage extends StatelessWidget {
           children: [
             Center(
               child: SingleChildScrollView(
-                padding: Responsive.pagePadding(context)
-                    .add(const EdgeInsets.only(top: 6, bottom: 92)),
+                padding: Responsive.pagePadding(
+                  context,
+                ).add(const EdgeInsets.only(top: 6, bottom: 92)),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 760),
                   child: Column(
                     children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFD9FBE4),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Text(
-                      'SYSTEM ONLINE',
-                      style: TextStyle(
-                        color: Color(0xFF0E6F3C),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: Responsive.gap(context, 12)),
-
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'SmartPharma ',
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD9FBE4),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Text(
+                          'SYSTEM ONLINE',
                           style: TextStyle(
-                            color: Color(0xFF14233B),
-                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF0E6F3C),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.5,
                           ),
                         ),
-                        TextSpan(
-                          text: 'Portal',
-                          style: TextStyle(
-                            color: Color(0xFF7A879C),
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ],
-                    ),
-                    style: TextStyle(fontSize: Responsive.scale(context, 38)),
-                    textAlign: TextAlign.center,
-                  ),
-
-                  SizedBox(height: Responsive.gap(context, 4)),
-
-                  Text(
-                    'Centralized Patient Management & Clinical Records',
-                    style: TextStyle(
-                      fontSize: Responsive.scale(context, 17),
-                      color: Color(0xFF60728F),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-
-                  SizedBox(height: Responsive.gap(context, 46)),
-
-                  _menuCard(
-                    context: context,
-                    icon: Icons.search,
-                    iconBackground: const Color(0xFFF0F4FA),
-                    iconColor: Colors.blue,
-                    title: 'Patient Database',
-                    subtitle:
-                        'Access existing medical history and active treatments.',
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const DoctorIdGatePage(),
                       ),
-                    ),
-                  ),
 
-                  SizedBox(height: Responsive.gap(context, 16)),
+                      SizedBox(height: Responsive.gap(context, 12)),
 
-                  _menuCard(
-                    context: context,
-                    icon: Icons.person_outline,
-                    iconBackground: const Color(0xFFE8F7F4),
-                    iconColor: Colors.teal,
-                    title: 'Patient View',
-                    subtitle:
-                        'Open the patient-facing medicine summary without clinician login.',
-                    trailingAction: IconButton(
-                      icon: const Icon(Icons.qr_code_scanner, color: Colors.teal, size: 48),
-                      tooltip: 'Scan QR',
-                      onPressed: () async {
-                        final scannedId = await Navigator.push<String>(
-                          context,
-                          MaterialPageRoute(builder: (_) => const ScannerPage()),
-                        );
-                        if (!context.mounted) {
-                          return;
-                        }
-                        if (scannedId != null && scannedId.trim().isNotEmpty) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => PatientPortalOtpGate(
-                                patientUuid: scannedId.trim(),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'SmartPharma ',
+                              style: TextStyle(
+                                color: Color(0xFF14233B),
+                                fontWeight: FontWeight.w900,
                               ),
                             ),
-                          );
-                        }
-                      },
-                    ),
-                    onPressed: () {
-                      final controller = TextEditingController();
-                      showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('Open Patient View'),
-                          content: TextField(
-                            controller: controller,
-                            autofocus: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Patient ID',
-                              hintText: 'e.g. PNEU001',
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancel'),
-                            ),
-                            FilledButton(
-                              onPressed: () {
-                                final id = controller.text.trim();
-                                Navigator.pop(context);
-                                if (id.isNotEmpty) {
-                                  Navigator.push(
-                                    context,
-                                    PatientViewPage.route(id),
-                                  );
-                                }
-                              },
-                              child: const Text('Open'),
+                            TextSpan(
+                              text: 'Portal',
+                              style: TextStyle(
+                                color: Color(0xFF7A879C),
+                                fontWeight: FontWeight.w300,
+                              ),
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
-
-                  SizedBox(height: Responsive.gap(context, 16)),
-
-                  _menuCard(
-                    context: context,
-                    icon: Icons.add,
-                    iconBackground: const Color(0xFF116D37),
-                    iconColor: Colors.white,
-                    title: 'New Registration',
-                    subtitle: 'Onboard a new patient and assign ward location.',
-                    highlight: true,
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AddNewPatientPage(),
+                        style: TextStyle(
+                          fontSize: Responsive.scale(context, 38),
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ),
 
-                  SizedBox(height: Responsive.gap(context, 16)),
+                      SizedBox(height: Responsive.gap(context, 4)),
 
-                  _menuCard(
-                    context: context,
-                    icon: Icons.medication,
-                    iconBackground: const Color(0xFFF0F4FA),
-                    iconColor: Colors.pinkAccent,
-                    title: 'Pharmacist Portal',
-                    subtitle:
-                        'Inventory management and prescription verification.',
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const PharmacistIdGatePage(),
+                      Text(
+                        'Centralized Patient Management & Clinical Records',
+                        style: TextStyle(
+                          fontSize: Responsive.scale(context, 17),
+                          color: Color(0xFF60728F),
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ),
+
+                      SizedBox(height: Responsive.gap(context, 46)),
+
+                      _menuCard(
+                        context: context,
+                        icon: Icons.search,
+                        iconBackground: const Color(0xFFF0F4FA),
+                        iconColor: Colors.blue,
+                        title: 'Patient Database',
+                        subtitle:
+                            'Access existing medical history and active treatments.',
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const DoctorIdGatePage(),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: Responsive.gap(context, 16)),
+
+                      _menuCard(
+                        context: context,
+                        icon: Icons.person_outline,
+                        iconBackground: const Color(0xFFE8F7F4),
+                        iconColor: Colors.teal,
+                        title: 'Patient View',
+                        subtitle:
+                            'Open the patient-facing medicine summary without clinician login.',
+                        trailingAction: IconButton(
+                          icon: const Icon(
+                            Icons.qr_code_scanner,
+                            color: Colors.teal,
+                            size: 48,
+                          ),
+                          tooltip: 'Scan QR',
+                          onPressed: () async {
+                            final scannedId = await Navigator.push<String>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Platform.isLinux
+                                    ? const PiScannerPage()
+                                    : const ScannerPage(),
+                              ),
+                            );
+                            if (!context.mounted) {
+                              return;
+                            }
+                            if (scannedId != null &&
+                                scannedId.trim().isNotEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => PatientPortalOtpGate(
+                                    patientUuid: scannedId.trim(),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                        onPressed: () {
+                          final controller = TextEditingController();
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: const Text('Open Patient View'),
+                              content: TextField(
+                                controller: controller,
+                                autofocus: true,
+                                decoration: const InputDecoration(
+                                  labelText: 'Patient ID',
+                                  hintText: 'e.g. PNEU001',
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Cancel'),
+                                ),
+                                FilledButton(
+                                  onPressed: () {
+                                    final id = controller.text.trim();
+                                    Navigator.pop(context);
+                                    if (id.isNotEmpty) {
+                                      Navigator.push(
+                                        context,
+                                        PatientViewPage.route(id),
+                                      );
+                                    }
+                                  },
+                                  child: const Text('Open'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+
+                      SizedBox(height: Responsive.gap(context, 16)),
+
+                      _menuCard(
+                        context: context,
+                        icon: Icons.add,
+                        iconBackground: const Color(0xFF116D37),
+                        iconColor: Colors.white,
+                        title: 'New Registration',
+                        subtitle:
+                            'Onboard a new patient and assign ward location.',
+                        highlight: true,
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AddNewPatientPage(),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: Responsive.gap(context, 16)),
+
+                      _menuCard(
+                        context: context,
+                        icon: Icons.medication,
+                        iconBackground: const Color(0xFFF0F4FA),
+                        iconColor: Colors.pinkAccent,
+                        title: 'Pharmacist Portal',
+                        subtitle:
+                            'Inventory management and prescription verification.',
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PharmacistIdGatePage(),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -420,9 +433,9 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
       _weight.clear();
       _blood.clear();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error saving patient: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error saving patient: $e')));
     }
   }
 
@@ -439,154 +452,153 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
           children: [
             Center(
               child: SingleChildScrollView(
-                padding: Responsive.pagePadding(context)
-                    .add(const EdgeInsets.only(bottom: 24)),
+                padding: Responsive.pagePadding(
+                  context,
+                ).add(const EdgeInsets.only(bottom: 24)),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 780),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                  TextButton.icon(
-                    onPressed: _home,
-                    icon: const Icon(Icons.arrow_back, size: 16),
-                    label: const Text('Back to Portal'),
-                    style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF60728F),
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: Responsive.gap(context, 6)),
-
-                  Center(
-                    child: Text(
-                      'New Patient Registration',
-                      style: TextStyle(
-                        fontSize: Responsive.scale(context, 28),
-                        fontWeight: FontWeight.w900,
-                        color: const Color(0xFF14233B),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-
-                  SizedBox(height: Responsive.gap(context, 28)),
-
-                  Container(
-                    padding: EdgeInsets.all(compact ? 20 : 40),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(compact ? 22 : 34),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 25,
-                          offset: const Offset(0, 12),
+                      TextButton.icon(
+                        onPressed: _home,
+                        icon: const Icon(Icons.arrow_back, size: 16),
+                        label: const Text('Back to Portal'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: const Color(0xFF60728F),
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ],
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          ResponsiveWrap(
-                            minItemWidth: compact ? 250 : 300,
-                            spacing: 18,
-                            runSpacing: 18,
-                            children: [
-                              _modernField(
-                                _name,
-                                'Full Name',
-                                'Full legal name',
-                              ),
-                              _modernField(
-                                _wardRoom,
-                                'Assigned Ward',
-                                'e.g. Ward B-01',
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: Responsive.gap(context, 24)),
-
-                          ResponsiveWrap(
-                            minItemWidth: compact ? 118 : 135,
-                            spacing: 16,
-                            runSpacing: 18,
-                            children: [
-                              _modernField(
-                                _age,
-                                'Age',
-                                '',
-                                kb: TextInputType.number,
-                              ),
-                              _genderField(),
-                              _modernField(
-                                _blood,
-                                'Blood Type',
-                                'O+',
-                              ),
-                              _modernField(
-                                _height,
-                                'Height (cm)',
-                                '',
-                                kb: TextInputType.number,
-                              ),
-                              _modernField(
-                                _weight,
-                                'Weight (kg)',
-                                '',
-                                kb: TextInputType.number,
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _modernField(
-                                  _emergencyContactEmail,
-                                  'Emergency Contact Email',
-                                  'email@example.com',
-                                  kb: TextInputType.emailAddress,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: Responsive.gap(context, 38)),
-
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: ElevatedButton(
-                              onPressed: () async => await _submit(),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                elevation: 4,
-                                shadowColor: Colors.black26,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                              child: const Text(
-                                'Confirm & Register Patient',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                  ),
+
+                      SizedBox(height: Responsive.gap(context, 6)),
+
+                      Center(
+                        child: Text(
+                          'New Patient Registration',
+                          style: TextStyle(
+                            fontSize: Responsive.scale(context, 28),
+                            fontWeight: FontWeight.w900,
+                            color: const Color(0xFF14233B),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      SizedBox(height: Responsive.gap(context, 28)),
+
+                      Container(
+                        padding: EdgeInsets.all(compact ? 20 : 40),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(
+                            compact ? 22 : 34,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 25,
+                              offset: const Offset(0, 12),
+                            ),
+                          ],
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              ResponsiveWrap(
+                                minItemWidth: compact ? 250 : 300,
+                                spacing: 18,
+                                runSpacing: 18,
+                                children: [
+                                  _modernField(
+                                    _name,
+                                    'Full Name',
+                                    'Full legal name',
+                                  ),
+                                  _modernField(
+                                    _wardRoom,
+                                    'Assigned Ward',
+                                    'e.g. Ward B-01',
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: Responsive.gap(context, 24)),
+
+                              ResponsiveWrap(
+                                minItemWidth: compact ? 118 : 135,
+                                spacing: 16,
+                                runSpacing: 18,
+                                children: [
+                                  _modernField(
+                                    _age,
+                                    'Age',
+                                    '',
+                                    kb: TextInputType.number,
+                                  ),
+                                  _genderField(),
+                                  _modernField(_blood, 'Blood Type', 'O+'),
+                                  _modernField(
+                                    _height,
+                                    'Height (cm)',
+                                    '',
+                                    kb: TextInputType.number,
+                                  ),
+                                  _modernField(
+                                    _weight,
+                                    'Weight (kg)',
+                                    '',
+                                    kb: TextInputType.number,
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _modernField(
+                                      _emergencyContactEmail,
+                                      'Emergency Contact Email',
+                                      'email@example.com',
+                                      kb: TextInputType.emailAddress,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: Responsive.gap(context, 38)),
+
+                              SizedBox(
+                                width: double.infinity,
+                                height: 56,
+                                child: ElevatedButton(
+                                  onPressed: () async => await _submit(),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    elevation: 4,
+                                    shadowColor: Colors.black26,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Confirm & Register Patient',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -638,12 +650,9 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
               borderSide: const BorderSide(color: Color(0xFFE0E7EF)),
             ),
             focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(
-            color: Colors.blue,
-            width: 1.4,
-        ),
-      ),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: Colors.blue, width: 1.4),
+            ),
           ),
           validator: (v) =>
               (v == null || v.trim().isEmpty) ? 'Please enter $label' : null,
@@ -789,13 +798,17 @@ class _PatientListPageState extends State<PatientListPage> {
                             leading: CircleAvatar(
                               radius: 22,
                               backgroundColor: Colors.blue.shade100,
-                              child: Icon(Icons.person,
-                                  color: Colors.blue.shade700),
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.blue.shade700,
+                              ),
                             ),
                             title: Text(
                               p.name,
                               style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             subtitle: Text(
                               'Ward: ${p.wardRoomNo}\n'
@@ -805,68 +818,83 @@ class _PatientListPageState extends State<PatientListPage> {
                             ),
                             isThreeLine: true,
                             trailing: Row(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    IconButton(
-      icon: const Icon(Icons.delete, color: Colors.red),
-      onPressed: () async {
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: const Text('Delete Patient?'),
+                                        content: Text(
+                                          'Delete ${p.name} from Supabase?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, false),
+                                            child: const Text('Cancel'),
+                                          ),
 
-        final confirm = await showDialog<bool>(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text('Delete Patient?'),
-            content: Text(
-              'Delete ${p.name} from Supabase?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () =>
-                    Navigator.pop(context, false),
-                child: const Text('Cancel'),
-              ),
+                                          ElevatedButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, true),
 
-              ElevatedButton(
-                onPressed: () =>
-                    Navigator.pop(context, true),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                              foregroundColor: Colors.white,
+                                            ),
 
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                ),
+                                            child: const Text('Delete'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
 
-                child: const Text('Delete'),
-              ),
-            ],
-          ),
-        );
+                                    if (confirm == true) {
+                                      try {
+                                        await PatientSupabaseService.deletePatient(
+                                          p.id,
+                                        );
 
-        if (confirm == true) {
+                                        setState(() {
+                                          patients.removeWhere(
+                                            (patient) => patient.id == p.id,
+                                          );
+                                        });
 
-          try {
-  await PatientSupabaseService.deletePatient(p.id);
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              '${p.name} deleted from Supabase',
+                                            ),
+                                          ),
+                                        );
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Delete failed: $e'),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                                ),
 
-  setState(() {
-    patients.removeWhere((patient) => patient.id == p.id);
-  });
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('${p.name} deleted from Supabase')),
-  );
-} catch (e) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('Delete failed: $e')),
-  );
-}
-        }
-      },
-    ),
-
-    Icon(
-      Icons.arrow_forward_ios,
-      color: Colors.blue.shade600,
-    ),
-  ],
-),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.blue.shade600,
+                                ),
+                              ],
+                            ),
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -962,7 +990,8 @@ class PatientActionsPage extends StatelessWidget {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => PatientHistoryPage(patient: patient),
+                            builder: (_) =>
+                                PatientHistoryPage(patient: patient),
                           ),
                         ),
                       ),
@@ -985,10 +1014,7 @@ class PatientActionsPage extends StatelessWidget {
                   ),
                   child: const Text(
                     'Home',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                   ),
                 ),
               ),
@@ -1023,8 +1049,9 @@ class PatientActionsPage extends StatelessWidget {
 
   Widget _patientTitle(BuildContext context, {bool centered = false}) {
     return Column(
-      crossAxisAlignment:
-          centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: centered
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
         Text(
           patient.name,
@@ -1070,7 +1097,9 @@ class PatientActionsPage extends StatelessWidget {
       padding: EdgeInsets.all(Responsive.isCompact(context) ? 20 : 28),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(Responsive.isCompact(context) ? 22 : 30),
+        borderRadius: BorderRadius.circular(
+          Responsive.isCompact(context) ? 22 : 30,
+        ),
         border: Border.all(color: const Color(0xFFE0E7EF)),
       ),
       child: Column(
@@ -1180,18 +1209,13 @@ class PatientActionsPage extends StatelessWidget {
         alignment: Alignment.centerLeft,
         foregroundColor: Colors.black,
         side: const BorderSide(color: Color(0xFFE0E7EF)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
       label: Align(
         alignment: Alignment.centerLeft,
         child: Text(
           text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
         ),
       ),
     );
@@ -1204,10 +1228,7 @@ class PatientActionsPage extends StatelessWidget {
 class PatientHistoryPage extends StatelessWidget {
   final Patient patient;
 
-  const PatientHistoryPage({
-    super.key,
-    required this.patient,
-  });
+  const PatientHistoryPage({super.key, required this.patient});
 
   @override
   Widget build(BuildContext context) {
@@ -1226,7 +1247,6 @@ class PatientHistoryPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // Patient Information Card
             Container(
               width: double.infinity,
@@ -1260,10 +1280,7 @@ class PatientHistoryPage extends StatelessWidget {
 
             const Text(
               "Medical History",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 16),
@@ -1336,10 +1353,7 @@ class PatientHistoryPage extends StatelessWidget {
 
                 child: const Text(
                   "View eGFR History",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
