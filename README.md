@@ -16,10 +16,6 @@
    flutter run
 ```
 
-That is an even better strategy. If your teammate uses an AI coding agent to build the Nurse Console, giving them a clean, clear integration guide in the repository (e.g., in `README.md` or `NURSE_CONSOLE_INTEGRATION.md`) will allow their AI to read the rules and hook directly into your services without breaking anything.
-
-Here is a ready-to-use developer integration guide you can drop into your repository or hand straight to your teammate and their AI:
-
 ---
 
 # Nurse Console Integration Guide (`SmartPharma`)
