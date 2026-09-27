@@ -8,6 +8,7 @@ class Patient {
   final String height;
   final String weight;
   final String bloodType;
+  final String? emergencyContactEmail;
 
   Patient({
     required this.id,
@@ -18,6 +19,7 @@ class Patient {
     required this.height,
     required this.weight,
     required this.bloodType,
+    this.emergencyContactEmail,
   });
 
   // Serialization
@@ -30,6 +32,7 @@ class Patient {
     'height': height,
     'weight': weight,
     'bloodType': bloodType,
+    'emergencyContactEmail': emergencyContactEmail,
   };
 
   factory Patient.fromJson(Map<String, dynamic> json) => Patient(
@@ -41,6 +44,8 @@ class Patient {
     height: json['height'] ?? '',
     weight: json['weight'] ?? '',
     bloodType: json['blood_type'] ?? '',
+    emergencyContactEmail:
+        json['emergencyContactEmail'] ?? json['emergency_contact_email'],
   );
 }
 

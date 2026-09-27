@@ -9,6 +9,7 @@ import 'egfr_graph_page.dart';
 import '../services/patient_supabase_service.dart';
 import 'patient_condition_detail_page.dart';
 import 'patient_view_page.dart';
+import 'patient_portal_otp_gate.dart';
 import 'scanner_page.dart';
 import '../widgets/review_notification_bell.dart';
 import '../widgets/responsive.dart';
@@ -147,7 +148,11 @@ class PatientOverviewPage extends StatelessWidget {
                         if (scannedId != null && scannedId.trim().isNotEmpty) {
                           Navigator.push(
                             context,
-                            PatientViewPage.route(scannedId.trim()),
+                            MaterialPageRoute(
+                              builder: (_) => PatientPortalOtpGate(
+                                patientUuid: scannedId.trim(),
+                              ),
+                            ),
                           );
                         }
                       },
@@ -368,6 +373,9 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
   final _height = TextEditingController();
   final _weight = TextEditingController();
   final _blood = TextEditingController();
+  final _emergencyContactEmail = TextEditingController(
+    text: 'richardjosh0406@gmail.com',
+  );
   String _gender = 'Male';
   @override
   void dispose() {
@@ -377,6 +385,7 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
     _height.dispose();
     _weight.dispose();
     _blood.dispose();
+    _emergencyContactEmail.dispose();
     super.dispose();
   }
 
@@ -392,6 +401,7 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
       height: _height.text.trim(),
       weight: _weight.text.trim(),
       bloodType: _blood.text.trim(),
+      emergencyContactEmail: _emergencyContactEmail.text.trim(),
     );
 
     try {
@@ -529,6 +539,21 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
                                 'Weight (kg)',
                                 '',
                                 kb: TextInputType.number,
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _modernField(
+                                  _emergencyContactEmail,
+                                  'Emergency Contact Email',
+                                  'email@example.com',
+                                  kb: TextInputType.emailAddress,
+                                ),
                               ),
                             ],
                           ),
@@ -1020,6 +1045,18 @@ class PatientActionsPage extends StatelessWidget {
           ),
           textAlign: centered ? TextAlign.center : TextAlign.start,
         ),
+        if (patient.emergencyContactEmail != null &&
+            patient.emergencyContactEmail!.trim().isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(
+            'Emergency Contact: ${patient.emergencyContactEmail}',
+            style: TextStyle(
+              fontSize: Responsive.scale(context, 14),
+              color: const Color(0xFF60728F),
+            ),
+            textAlign: centered ? TextAlign.center : TextAlign.start,
+          ),
+        ],
       ],
     );
   }

@@ -14,6 +14,7 @@ class PatientSupabaseService {
       'height': p.height,
       'weight': p.weight,
       'blood_type': p.bloodType,
+      'emergency_contact_email': p.emergencyContactEmail,
     });
   }
   static Future<List<Patient>> getPatients() async {
@@ -29,6 +30,7 @@ class PatientSupabaseService {
         height: e['height'],
         weight: e['weight'],
         bloodType: e['blood_type'],
+        emergencyContactEmail: e['emergency_contact_email'],
       );
     }).toList();
   }
@@ -49,6 +51,7 @@ class PatientSupabaseService {
       height: data['height'],
       weight: data['weight'],
       bloodType: data['blood_type'],
+      emergencyContactEmail: data['emergency_contact_email'],
     );
   }
 
@@ -71,6 +74,7 @@ class PatientSupabaseService {
         height: e['height'],
         weight: e['weight'],
         bloodType: e['blood_type'],
+        emergencyContactEmail: e['emergency_contact_email'],
       );
     }).toList();
   }
@@ -108,6 +112,7 @@ class PatientSupabaseService {
         height: e['height'],
         weight: e['weight'],
         bloodType: e['blood_type'],
+        emergencyContactEmail: e['emergency_contact_email'],
       );
     }).toList();
   }
