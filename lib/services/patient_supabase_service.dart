@@ -1,12 +1,15 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/models.dart';
+import 'package:uuid/uuid.dart';
 
 class PatientSupabaseService {
   static final _client = Supabase.instance.client;
+  static const _uuid = Uuid();
 
   static Future<void> addPatient(Patient p) async {
     await _client.from('patients').insert({
       'id': p.id,
+      'qr_uuid': _uuid.v4(),
       'ward_room_no': p.wardRoomNo,
       'name': p.name,
       'gender': p.gender,
