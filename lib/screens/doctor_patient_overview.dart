@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/patient_database.dart';
@@ -148,7 +147,9 @@ class PatientOverviewPage extends StatelessWidget {
                             final scannedId = await Navigator.push<String>(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => Platform.isLinux
+                                builder: (_) => !kIsWeb &&
+                                        defaultTargetPlatform ==
+                                            TargetPlatform.linux
                                     ? const PiScannerPage()
                                     : const ScannerPage(),
                               ),
@@ -386,9 +387,7 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
   final _height = TextEditingController();
   final _weight = TextEditingController();
   final _blood = TextEditingController();
-  final _emergencyContactEmail = TextEditingController(
-    text: 'richardjosh0406@gmail.com',
-  );
+  final _emergencyContactEmail = TextEditingController();
   String _gender = 'Male';
   @override
   void dispose() {
@@ -432,6 +431,7 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
       _height.clear();
       _weight.clear();
       _blood.clear();
+      _emergencyContactEmail.clear();
     } catch (e) {
       ScaffoldMessenger.of(
         context,

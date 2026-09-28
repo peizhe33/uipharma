@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -9,22 +10,44 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
-  final MobileScannerController _controller = MobileScannerController();
+  final MobileScannerController _controller = MobileScannerController(
+    autoStart: false,
+    formats: const [BarcodeFormat.qrCode],
+    invertImage: kIsWeb,
+  );
   bool _hasPopped = false;
+  bool _isStarting = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startScanner());
+  }
+
+  Future<void> _startScanner() async {
+    if (!mounted || _hasPopped || _isStarting || _controller.value.isRunning) {
+      return;
+    }
+
+    _isStarting = true;
+    try {
+      await _controller.start();
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to start the camera: $error')),
+      );
+    } finally {
+      _isStarting = false;
+    }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!_controller.value.isInitialized) return;
-    
     switch (state) {
       case AppLifecycleState.resumed:
-        if (mounted) _controller.start();
+        _startScanner();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
@@ -35,22 +58,17 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
     }
   }
 
-  // THIS IS THE MAGIC FIX
-  // deactivate() fires whenever the widget is removed from the active screen,
-  // even if it is just temporarily hidden by another page or tab.
-  @override
-  void deactivate() {
-    _controller.stop();
-    super.deactivate();
-  }
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // Let dispose() handle the cleanup directly without calling stop() first
-    // to prevent plugin race conditions.
-    _controller.dispose(); 
+    _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _finishScan(String value) async {
+    await _controller.stop();
+    if (!mounted) return;
+    Navigator.of(context).pop(value);
   }
 
   @override
@@ -64,21 +82,20 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
             return;
           }
 
-          final value = capture.barcodes.first.rawValue;
-          if (value == null) {
+          final value = capture.barcodes
+              .map((barcode) =>
+                (barcode.rawValue ?? barcode.displayValue)?.trim())
+              .whereType<String>()
+              .firstWhere((value) => value.isNotEmpty, orElse: () => '');
+          if (value.isEmpty) {
             return;
           }
 
           setState(() {
             _hasPopped = true;
           });
-          
-          // Stop the camera immediately upon successful scan before popping
-          _controller.stop().then((_) {
-            if (mounted) {
-              Navigator.pop(context, value);
-            }
-          });
+
+          _finishScan(value);
         },
       ),
     );
