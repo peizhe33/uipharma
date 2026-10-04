@@ -1,0 +1,12 @@
+flask
+flask-cors
+requests
+langchain
+langchain-community
+langchain-core
+langchain-chroma
+chromadb
+pypdf
+sentence-transformers
+rank-bm25
+langchain-huggingface

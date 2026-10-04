@@ -1,0 +1,65 @@
+{
+  "question": "Verify the safety and appropriateness of the prescribed medications for this patient based on UMMC Antimicrobial Guidelines.",
+  "age": 60,
+  "k": 5,
+  "patient": {
+    "name": "Lim Wei Jian",
+    "id": "1780571938775",
+    "ward_room": "B201",
+    "gender": "Female",
+    "height": "168",
+    "weight": "72",
+    "blood_type": "B+"
+  },
+  "vitals": {
+    "date": "2025-11-10",
+    "temperature": "38",
+    "blood_pressure": "122/80",
+    "heart_rate": "96",
+    "spo2": "97",
+    "urine_output": "50",
+    "allergy_details": "Penicillin (rash)",
+    "renal_function": "Normal"
+  },
+  "labs": {
+    "creatinine": "1.0",
+    "egfr": "88",
+    "lactate": "1.2",
+    "wbc": "14"
+  },
+  "diagnosis": "Cellulitis / skin and soft tissue infection",
+  "prescribed_medicines": [
+    {
+      "name": "Cloxacillin",
+      "dose": "500",
+      "unit": "mg",
+      "frequency": "Every 6 hours",
+      "route": "PO",
+      "prn": false
+    },
+    {
+      "name": "Clindamycin",
+      "dose": "300",
+      "unit": "mg",
+      "frequency": "Every 6 hours",
+      "route": "PO",
+      "prn": false
+    },
+    {
+      "name": "Cefalexin",
+      "dose": "500",
+      "unit": "mg",
+      "frequency": "Every 6 hours",
+      "route": "PO",
+      "prn": false
+    },
+    {
+      "name": "Metronidazole",
+      "dose": "400",
+      "unit": "mg",
+      "frequency": "Three times a day",
+      "route": "PO",
+      "prn": false
+    }
+  ]
+}

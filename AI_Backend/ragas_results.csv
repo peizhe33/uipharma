@@ -1,0 +1,10 @@
+Case ID,Description,Faithfulness,Answer Relevancy,Context Precision,Context Recall,Overall
+TC01,CAP adult - correct amoxicillin/clavulanate,0.2000,1.0000,0.6389,0.0000,0.4597
+TC02,UTI adult - wrong drug (amoxicillin mono),0.3333,0.7000,1.0000,0.5000,0.6333
+TC03,CAP - penicillin allergy (anaphylaxis),0.0000,1.0000,0.6389,0.0000,0.4097
+TC04,Pyelonephritis - renal impairment eGFR 20,0.0000,1.0000,0.5000,0.0000,0.3750
+TC05,SSTI cellulitis - correct cloxacillin,0.5000,1.0000,0.6389,0.0000,0.5347
+TC06,Paediatric UTI - nitrofurantoin + G6PD,1.0000,1.0000,1.0000,1.0000,1.0000
+TC07,CAP multi-drug with supportive care,0.0000,1.0000,0.5000,0.3333,0.4583
+TC08,Meningitis - ceftriaxone 2g q12H,0.0000,1.0000,0.8333,1.0000,0.7083
+AVERAGE,,0.2542,0.9625,0.7188,0.3542,0.5724
