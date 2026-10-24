@@ -5,6 +5,7 @@ import '../services/nurse_service.dart';
 import '../services/patient_supabase_service.dart';
 import 'nurse_id_page.dart';
 import 'nurse_patient_detail_page.dart';
+import '../widgets/osk_text_field.dart';
 
 /// Patient queue shown after nurse login.
 class NursePatientListPage extends StatefulWidget {
@@ -102,7 +103,7 @@ class _NursePatientListPageState extends State<NursePatientListPage> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-              child: TextField(
+              child: OskTextField(
                 onChanged: (v) => setState(() => _query = v),
                 decoration: InputDecoration(
                   labelText: 'Search patient or ward',

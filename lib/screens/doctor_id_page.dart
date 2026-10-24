@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'doctor_patient_overview.dart'; // for PatientListPage
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 
 class DoctorIdGatePage extends StatefulWidget {
   const DoctorIdGatePage({super.key});
@@ -95,7 +96,7 @@ class _DoctorIdGatePageState extends State<DoctorIdGatePage> {
                           style: TextStyle(color: Colors.black54),
                         ),
                         const SizedBox(height: 24),
-                        TextFormField(
+                        OskTextFormField(
                           controller: _idCtrl,
                           onChanged: _checkValid,
                           decoration: const InputDecoration(

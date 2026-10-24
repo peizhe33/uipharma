@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pj/services/feedback_service.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -179,7 +180,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: TextField(
+              child: OskTextField(
                 controller: _feedbackController,
                 maxLines: null,
                 expands: true,

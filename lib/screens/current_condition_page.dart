@@ -5,6 +5,7 @@ import 'medication_recommendation_page.dart';
 import '../services/patient_supabase_service.dart';
 import '../widgets/review_notification_bell.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 
 class CurrentConditionPage extends StatefulWidget {
   final Patient patient;
@@ -274,7 +275,7 @@ class _CurrentConditionPageState extends State<CurrentConditionPage> {
   Widget _vField(TextEditingController c, String label, {TextInputType? kb}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: TextFormField(
+      child: OskTextFormField(
         controller: c,
         keyboardType: kb,
         decoration: InputDecoration(
@@ -406,7 +407,7 @@ class _CurrentConditionPageState extends State<CurrentConditionPage> {
                   _vField(_lact, 'Lactate (mmol/L)',
                       kb: TextInputType.number),
                   _vField(_wbc, 'WBC (10⁹/L)', kb: TextInputType.number),
-                  TextFormField(
+                  OskTextFormField(
                     controller: _cond,
                     maxLines: 3,
                     decoration: const InputDecoration(

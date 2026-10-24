@@ -16,6 +16,7 @@ import 'pi_scanner_page.dart';
 import 'scanner_page.dart';
 import '../widgets/review_notification_bell.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 
 class PatientOverviewPage extends StatelessWidget {
   const PatientOverviewPage({super.key});
@@ -178,7 +179,7 @@ class PatientOverviewPage extends StatelessWidget {
                             context: context,
                             builder: (_) => AlertDialog(
                               title: const Text('Open Patient View'),
-                              content: TextField(
+                              content: OskTextField(
                                 controller: controller,
                                 autofocus: true,
                                 decoration: const InputDecoration(
@@ -651,7 +652,7 @@ class _AddNewPatientPageState extends State<AddNewPatientPage> {
           ),
         ),
         const SizedBox(height: 14),
-        TextFormField(
+        OskTextFormField(
           controller: c,
           keyboardType: kb,
           textAlign: TextAlign.center,
@@ -785,7 +786,7 @@ class _PatientListPageState extends State<PatientListPage> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-              child: TextField(
+              child: OskTextField(
                 onChanged: (v) => setState(() => _searchQuery = v),
                 decoration: InputDecoration(
                   labelText: 'Search Patient',

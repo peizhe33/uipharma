@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../services/patient_supabase_service.dart';
+import 'osk_text_field.dart';
 
 class DoctorReviewNotificationBell extends StatefulWidget {
   const DoctorReviewNotificationBell({super.key});
@@ -409,7 +410,7 @@ Future<void> _showDoctorReviewDialog(
                             },
                     ),
                     const SizedBox(height: 12),
-                    TextField(
+                    OskTextField(
                       controller: reasonController,
                       minLines: 2,
                       maxLines: 4,
@@ -569,7 +570,7 @@ Future<void> _showPharmacistDecisionDialog(
                             },
                     ),
                     const SizedBox(height: 12),
-                    TextField(
+                    OskTextField(
                       controller: reasonController,
                       minLines: 2,
                       maxLines: 4,
@@ -800,7 +801,7 @@ class _EditablePrescriptionCardState extends State<_EditablePrescriptionCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextField(
+                    OskTextField(
                       controller: _nameControllers[index],
                       decoration: const InputDecoration(
                         labelText: 'Medicine',
@@ -812,7 +813,7 @@ class _EditablePrescriptionCardState extends State<_EditablePrescriptionCard> {
                     const SizedBox(height: 8),
                     LayoutBuilder(
                       builder: (context, constraints) {
-                        final doseField = TextField(
+                        final doseField = OskTextField(
                           controller: _doseControllers[index],
                           decoration: const InputDecoration(
                             labelText: 'Dose',

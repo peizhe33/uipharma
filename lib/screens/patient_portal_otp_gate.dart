@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'patient_view_page.dart';
 import 'scanner_page.dart';
+import '../widgets/osk_text_field.dart';
 
 class ReadOnlyPatientDashboard extends StatelessWidget {
   final String patientUuid;
@@ -191,7 +192,7 @@ class _PatientPortalOtpGateState extends State<PatientPortalOtpGate> {
             ),
           ],
           const SizedBox(height: 20),
-          TextField(
+          OskTextField(
             controller: _otpController,
             autofocus: true,
             keyboardType: TextInputType.number,

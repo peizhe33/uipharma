@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/patient_supabase_service.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 
 enum AlertSeverity { high, medium, low }
 
@@ -1123,7 +1124,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                TextField(
+                OskTextField(
                   controller: _aiNameCtrls[i],
                   decoration: InputDecoration(
                     labelText: 'Drug',
@@ -1138,7 +1139,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
                         )
                       : null,
                 ),
-                TextField(
+                OskTextField(
                   controller: _aiDoseCtrls[i],
                   decoration: InputDecoration(
                     labelText: 'Dose',
@@ -1445,7 +1446,7 @@ class _PrescriptionAlertPageState extends State<PrescriptionAlertPage> {
           const SizedBox(height: 10),
           if (_alerts.isNotEmpty &&
               _selectedReason == 'Others (Please specify)') ...[
-            TextField(
+            OskTextField(
               controller: _otherReasonCtrl,
               decoration: const InputDecoration(
                 labelText: 'Type reason here',
