@@ -91,10 +91,10 @@ class SmartPharmaApi {
   // - Android phone on same Wi-Fi: use 'http://<laptop-LAN-IP>:5009'
   //   (run `ipconfig` on the laptop and copy the IPv4 address)
   // LOCAL (running Flutter on same laptop as backend):
- // static const String _baseUrl = 'https://stingy-gibberish-backtalk.ngrok-free.dev';
-    static const String _baseUrl = 'https://aweigh-olene-nomothetic.ngrok-free.dev';
+ // static const String _baseUrl = '';
+    static const String _baseUrl = '';
   // LAN (running Flutter on phone/another device, same WiFi):
-  //static const String _baseUrl = 'http://172.20.10.11:5009';
+  //static const String _baseUrl = '';
 
   Future<SmartPharmaResponse> verifyPrescription(
     String prompt, {
