@@ -4,6 +4,7 @@ import 'dose_verification_page.dart';
 import 'doctor_patient_overview.dart'; // <-- NEW import for Doctor home
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/review_notification_bell.dart';
+import '../widgets/osk_text_field.dart';
 
 class PharmacistPage extends StatefulWidget {
   final String pharmacistId;
@@ -140,7 +141,7 @@ class _PharmacistPageState extends State<PharmacistPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(
+                  child: OskTextField(
                     onChanged: (v) => setState(() => searchToBeVerified = v),
                     decoration: InputDecoration(
                       labelText: "Search by patient name",
@@ -251,7 +252,7 @@ class _PharmacistPageState extends State<PharmacistPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(
+                  child: OskTextField(
                     onChanged: (v) => setState(() => searchVerified = v),
                     decoration: InputDecoration(
                       labelText: "Search by patient name",

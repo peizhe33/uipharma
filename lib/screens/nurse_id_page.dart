@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../services/nurse_service.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 import 'nurse_patient_list_page.dart';
 
 /// Clears the nurse session screens and returns to the nurse login page
@@ -109,7 +110,7 @@ class _NurseIdGatePageState extends State<NurseIdGatePage> {
                         style: TextStyle(color: Colors.black54),
                       ),
                       const SizedBox(height: 24),
-                      TextField(
+                      OskTextField(
                         controller: _idCtrl,
                         onChanged: _checkValid,
                         textCapitalization: TextCapitalization.characters,

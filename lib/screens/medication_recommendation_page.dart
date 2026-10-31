@@ -4,6 +4,7 @@ import '../models/models.dart';
 import 'prescription_alert_page.dart';
 import '../services/api.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 
 class MedicationRecommendationPage extends StatefulWidget {
   final Patient patient;
@@ -429,7 +430,7 @@ Prescribed: $meds
                   children: [
                     _buildEntryRow(
                       'Drug Name :',
-                      TextField(
+                      OskTextField(
                         controller: _medicineController,
                         decoration: const InputDecoration(
                           isDense: true,
@@ -444,7 +445,7 @@ Prescribed: $meds
                         children: [
                           SizedBox(
                             width: 80,
-                            child: TextFormField(
+                            child: OskTextFormField(
                               controller: _doseController,
                               keyboardType:
                                   const TextInputType.numberWithOptions(

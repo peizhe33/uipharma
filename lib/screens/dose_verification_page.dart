@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../widgets/review_notification_bell.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'patient_condition_detail_page.dart';
@@ -375,7 +376,7 @@ class _DoseVerificationPageState extends State<DoseVerificationPage> {
                                 breakpoint: 460,
                                 gap: 8,
                                 leftFlex: 2,
-                                left: TextField(
+                                left: OskTextField(
                                   controller: _doseControllers[index],
                                   enabled: false,
                                   decoration: const InputDecoration(
@@ -620,7 +621,7 @@ class _DoseVerificationPageState extends State<DoseVerificationPage> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        TextField(
+                        OskTextField(
                           controller: _rejectionReason,
                           minLines: 2,
                           maxLines: 4,
@@ -637,7 +638,7 @@ class _DoseVerificationPageState extends State<DoseVerificationPage> {
                         ResponsiveTwoColumn(
                           breakpoint: 520,
                           gap: 10,
-                          left: TextField(
+                          left: OskTextField(
                             controller: _suggestedMedicine,
                             decoration: const InputDecoration(
                               labelText: 'Suggested medicine',
@@ -646,7 +647,7 @@ class _DoseVerificationPageState extends State<DoseVerificationPage> {
                               fillColor: Colors.white,
                             ),
                           ),
-                          right: TextField(
+                          right: OskTextField(
                             controller: _suggestedDose,
                             decoration: const InputDecoration(
                               labelText: 'Suggested dosage',
@@ -659,7 +660,7 @@ class _DoseVerificationPageState extends State<DoseVerificationPage> {
                         ),
                         const SizedBox(height: 10),
 
-                        TextField(
+                        OskTextField(
                           controller: _suggestedFrequency,
                           decoration: const InputDecoration(
                             labelText: 'Suggested frequency',
@@ -671,7 +672,7 @@ class _DoseVerificationPageState extends State<DoseVerificationPage> {
 
                         const SizedBox(height: 10),
 
-                        TextField(
+                        OskTextField(
                           controller: _suggestedRoute,
                           decoration: const InputDecoration(
                             labelText: 'Suggested route',

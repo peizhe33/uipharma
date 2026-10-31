@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pharmacist_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/responsive.dart';
+import '../widgets/osk_text_field.dart';
 
 class PharmacistIdGatePage extends StatefulWidget {
   const PharmacistIdGatePage({super.key});
@@ -118,7 +119,7 @@ class _PharmacistIdGatePageState extends State<PharmacistIdGatePage> {
                         style: TextStyle(color: Colors.black54),
                       ),
                       const SizedBox(height: 24),
-                      TextField(
+                      OskTextField(
                         controller: _idCtrl,
                         onChanged: _checkValid,
                         decoration: const InputDecoration(
